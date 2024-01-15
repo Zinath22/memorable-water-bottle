@@ -10,61 +10,61 @@ const Bottles = () => {
     const [cart, setCart] = useState([])
 
 
-    useEffect(()=>{
+    useEffect(() => {
         fetch('bottle.json')
-        .then(res => res.json())
-        .then(data => setBottles(data))
+            .then(res => res.json())
+            .then(data => setBottles(data))
     }, [])
 
     // load cart from local storage 
-    useEffect(() =>{
+    useEffect(() => {
         console.log('called the useEffect', bottles.length)
-        if(bottles.length ){
+        if (bottles.length) {
             const storeCart = getStoredCart();
-        console.log(storeCart, bottles)
+            console.log(storeCart, bottles)
 
-        const savedCart = [];
-        for(const id of storeCart){
-            console.log(id)
-            const bottle = bottles.find(bottle => bottle.id === id);
-            if(bottle){
-                savedCart.push(bottle)
+            const savedCart = [];
+            for (const id of storeCart) {
+                console.log(id)
+                const bottle = bottles.find(bottle => bottle.id === id);
+                if (bottle) {
+                    savedCart.push(bottle)
 
+                }
             }
+
+            console.log('saved cart', savedCart)
+            setCart(savedCart)
         }
 
-        console.log('saved cart', savedCart)
-        setCart(savedCart)
-        }
-            
 
     }, [bottles])
 
- const handleAddToCart = bottle =>{
-    const newCart = [...cart, bottle];
-    setCart(newCart);
-    addToLS(bottle.id);
- }
+    const handleAddToCart = bottle => {
+        const newCart = [...cart, bottle];
+        setCart(newCart);
+        addToLS(bottle.id);
+    }
 
- const handleRemoveFromCart = id =>{
-// visual cart remove 
-const remainingCart =  cart.filter(bottle => bottle.id !== id);
-setCart(remainingCart)
-// remove from LS 
-removeFromLS(id);
- }
+    const handleRemoveFromCart = id => {
+        // visual cart remove 
+        const remainingCart = cart.filter(bottle => bottle.id !== id);
+        setCart(remainingCart)
+        // remove from LS 
+        removeFromLS(id);
+    }
     return (
         <div>
             <h2>Bottles Available: {bottles.length}</h2>
-           <Cart cart = {cart} handleRemoveFromCart={handleRemoveFromCart}></Cart>
-       <div className="bottle-container">
-       {
-    bottles.map(bottle => <Bottle key={bottle.id} 
-        bottle={bottle}
-        handleAddToCart={handleAddToCart}
-    ></Bottle>)
-            }
-       </div>
+            <Cart cart={cart} handleRemoveFromCart={handleRemoveFromCart}></Cart>
+            <div className="bottle-container">
+                {
+                    bottles.map(bottle => <Bottle key={bottle.id}
+                        bottle={bottle}
+                        handleAddToCart={handleAddToCart}
+                    ></Bottle>)
+                }
+            </div>
         </div>
     );
 };
